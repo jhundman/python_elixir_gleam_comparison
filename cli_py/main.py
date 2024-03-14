@@ -12,21 +12,24 @@ app = typer.Typer()
 
 def get_foggy_data(lat: float, long: float):
     payload = {
-        "latitude": 33.7,
-        "longitude": -84.38,
+        "latitude": lat,
+        "longitude": long,
         "hourly": "weather_code",
         "temperature_unit": "fahrenheit",
         "wind_speed_unit": "mph",
         "precipitation_unit": "inch",
         "timezone": "auto",
     }
+
     response = requests.get("https://api.open-meteo.com/v1/forecast", params=payload)
     data = response.json()
-    codes = data["hourly"]["weather_code"]
 
+    codes = data["hourly"]["weather_code"]
     counts = Counter(codes)
-    foggy_hours = counts[45] + counts[48] + 0
+
+    foggy_hours = counts[45] + counts[48]
     first_date = None
+
     if foggy_hours > 0:
         i_45 = codes.index(45) if 45 in codes else float("inf")
         i_48 = codes.index(48) if 48 in codes else float("inf")
