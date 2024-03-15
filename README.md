@@ -10,7 +10,7 @@ This simple exploration will be as follows:
 
 - Create a CLI app in all three languages
 - The goal of the app is to have the two following commands
-  - `foggy` which calls the open meteo api for a given location lat long for the next week. It logs the location name, lat long, date, and number of hours in a sql lite db.
+  - `foggy` which calls the open meteo api for a given location lat long for the next week. It logs the location name, lat long, date, and number of hours in a sqlite db.
   - `list` which prints out all the data from the sqlite db.
 
 ## Links

@@ -1,9 +1,12 @@
 import typer
 from rich.console import Console
-import requests
 from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.table import Table
+import requests
 import time
 from collections import Counter
+import sqlite3
+from datetime import datetime
 
 
 console = Console(width=80)
@@ -38,6 +41,32 @@ def get_foggy_data(lat: float, long: float):
     return foggy_hours, first_date
 
 
+def insert_record(
+    location: str, lat: float, long: float, foggy_hours: int, first_date: str
+):
+    insert_sql = """
+        INSERT INTO weather_data (date, location, lat, long, foggy_hours, first_date)
+        VALUES (?, ?, ?, ?, ?, ?);
+    """
+
+    insert_data = (
+        datetime.now().date().strftime("%Y-%m-%d"),
+        location,
+        lat,
+        long,
+        foggy_hours,
+        first_date,
+    )
+
+    with sqlite3.connect("../foggy.db") as con:
+        cur = con.cursor()
+        cur.execute(insert_sql, insert_data)
+        con.commit()
+
+    print("1 Record Inserted")
+    return
+
+
 @app.command()
 def foggy(location: str, lat: float, long: float):
     console.print(
@@ -61,13 +90,43 @@ def foggy(location: str, lat: float, long: float):
 
         log_data = progress.add_task(description="[#fcbb92]Recording...")
         time.sleep(0.5)
+        insert_record(location, lat, long, foggy_hours, first_index)
         progress.update(log_data, description="[green]Recorded", completed=100)
 
 
 @app.command()
-def list(name: str):
-    print(f"Hello {name}")
+def list():
+    # Create Table
+    table = Table()
+
+    with sqlite3.connect("../foggy.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM weather_data;")
+        records = cur.fetchall()
+
+        for column in cur.description:
+            table.add_column(column[0])
+
+        for row in records:
+            table.add_row(*[str(item) for item in row])
+
+    # Print the table
+    console.print(table, style="#fcbb92")
 
 
 if __name__ == "__main__":
     app()
+
+
+# create_table = """
+#     --DROP TABLE IF EXISTS weather_data;
+#     CREATE TABLE weather_data (
+#         date TEXT,
+#         location TEXT,
+#         lat REAL,
+#         long REAL,
+#         foggy_hours INTEGER,
+#         first_date TEXT
+#     );
+# """
+#    cur.execute(create_table)
