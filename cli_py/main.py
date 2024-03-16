@@ -83,13 +83,12 @@ def foggy(location: str, lat: float, long: float):
 
     with progress:
         get_api = progress.add_task(description="[#fcbb92]Consulting...")
-        time.sleep(0.5)
+        time.sleep(0.2)
         foggy_hours, first_index = get_foggy_data(lat, long)
-        print(foggy_hours, first_index)
         progress.update(get_api, description="[green]Consulted", completed=100)
 
         log_data = progress.add_task(description="[#fcbb92]Recording...")
-        time.sleep(0.5)
+        time.sleep(0.2)
         insert_record(location, lat, long, foggy_hours, first_index)
         progress.update(log_data, description="[green]Recorded", completed=100)
 

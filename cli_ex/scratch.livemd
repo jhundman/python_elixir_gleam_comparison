@@ -1,0 +1,73 @@
+# Scratch
+
+## Getting Started with Elixir
+
+```elixir
+defmodule Count do
+  def count(0) do
+    IO.puts("\rDone")
+  end
+
+  def count(value) do
+    IO.write("\r#{value}")
+    Process.sleep(500)
+    count(value - 1)
+  end
+end
+```
+
+```elixir
+Count.count(15)
+```
+
+```elixir
+defmodule Progress do
+  @rounding_precision 2
+  @progress_bar_size 50
+
+  def bar(count, total) do
+    percent = percent_complete(count, total)
+    divisor = 100 / @progress_bar_size
+
+    completed_count = round(percent / divisor)
+    incomplete_count = @progress_bar_size - completed_count
+
+    "#{repeat(completed_count, "*")}#{repeat(incomplete_count, "-")} #{percent}%"
+  end
+
+  defp percent_complete(count, total) do
+    Float.round(100.0 * (count / total), @rounding_precision)
+  end
+
+  defp repeat(count, _) when count < 1, do: ""
+
+  defp repeat(count, str) do
+    1..count
+    |> Enum.map(fn _ -> str end)
+    |> Enum.join()
+  end
+end
+
+total = 50
+
+Enum.each(1..total, fn task ->
+  IO.write("\r#{Progress.bar(task, total)}")
+  Process.sleep(100)
+end)
+
+IO.puts("\n")
+```
+
+```elixir
+defmodule Color do
+  def blue(text) do
+    IO.ANSI.blue() <> text <> IO.ANSI.reset()
+  end
+end
+
+Color.blue("THIS IS BLUE") |> IO.puts()
+```
+
+```elixir
+
+```

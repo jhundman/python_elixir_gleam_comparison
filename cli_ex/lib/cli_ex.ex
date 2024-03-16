@@ -12,7 +12,7 @@ defmodule CliEx do
       :world
 
   """
-  def hello do
-    :world
+  def hello(args) do
+    :world + args
   end
 end
