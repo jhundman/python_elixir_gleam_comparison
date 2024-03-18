@@ -1,0 +1,1 @@
+CLI.print(System.argv())

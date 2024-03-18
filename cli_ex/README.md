@@ -19,4 +19,6 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/cli_ex>.
 
+To run `mix run cli.exs WORLD`
+
 https://github.com/djm/table_rex
