@@ -1,1 +1,1 @@
-CLI.print(System.argv())
+CLI.main(System.argv())
